@@ -43,7 +43,8 @@ async def parse_channel():
         except SessionPasswordNeededError:
             await client.sign_in(password=input('Password: '))
 
-    user_input_channel = input('Enter Telegram channel URL: ')
+    # user_input_channel = input('Enter Telegram channel URL: ')
+    user_input_channel = "https://t.me/dczloda"
 
     if user_input_channel.isdigit():
         entity = PeerChannel(int(user_input_channel))
@@ -53,12 +54,13 @@ async def parse_channel():
     my_channel = await client.get_entity(entity)
 
     offset_id = 0
-    limit = 100
+    limit = 1
     all_messages = []
     total_messages = 0
     total_count_limit = 0
+    messages_limit = int(config['Parser']['messages_limit'])
 
-    while True:
+    for _ in range(messages_limit):
         print("Current Offset ID is:", offset_id, "; Total Messages:", total_messages)
         history = await client(GetHistoryRequest(
             peer=my_channel,
